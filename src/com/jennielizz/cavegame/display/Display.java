@@ -1,12 +1,16 @@
 package com.jennielizz.cavegame.display;
 
+import java.io.IOException;
 import java.nio.IntBuffer;
 
+import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.system.MemoryStack;
+
+import com.jennielizz.cavegame.entites.Entity;
 
 public class Display {
 
@@ -64,13 +68,13 @@ public class Display {
         GLFW.glfwShowWindow(window);
     }
 
-    public void BeginUpdateLoop() {
+    public void BeginUpdateLoop() throws IOException {
         GL.createCapabilities();
         GL11.glClearColor(0, 0, 0, 0);
 
         Loader loader = new Loader();
-        Renderer renderer = new Renderer();
         StaticShader shader = new StaticShader();
+        Renderer renderer = new Renderer(shader);
 
         float[] vertices = {
             -0.5f, 0.5f, 0f,
@@ -84,7 +88,17 @@ public class Display {
             3, 1, 2
         };
 
-        RawModel model = loader.loadToVAO(vertices, indices);
+        float[] textureCoords = {
+            0, 0,
+            0, 1,
+            1, 1,
+            1, 0
+        };
+
+        RawModel model = loader.loadToVAO(vertices, textureCoords, indices);
+        model.setTexture(new Texture(loader.loadTexture("res/textures/TheMostRevisedPerson.png")));
+
+        Entity entity = new Entity(model, new Vector3f(0,0,-1),0,0,0,1);
 
 
         while (!GLFW.glfwWindowShouldClose(window)) {
@@ -94,7 +108,9 @@ public class Display {
             renderer.prepare();
             shader.start();
 
-            renderer.render(model);
+            entity.increasePosition(0, 0, -0.002f);
+
+            renderer.render(entity, shader);
 
             shader.stop();
             //Loop End

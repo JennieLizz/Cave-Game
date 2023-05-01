@@ -1,5 +1,7 @@
 package com.jennielizz.cavegame.display;
 
+import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
@@ -10,38 +12,49 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
+import org.lwjgl.stb.STBImage;
 import org.lwjgl.system.MemoryStack;
 
 public class Loader {
 
     private List<Integer> vaos = new ArrayList<Integer>();
     private List<Integer> vbos = new ArrayList<Integer>();
+    private List<Integer> textures = new ArrayList<Integer>();
     
     public RawModel loadToVAO(float[] positions, float[] texCoords, int[] indices) {
         int vaoID = createVAO();
         bindIndicesBuffer(indices);
-        storeDataInAttributeList(0, positions);
-        storeDataInAttributeList(1 , texCoords);
+        storeDataInAttributeList(0, 3, positions);
+        storeDataInAttributeList(1, 2, texCoords);
         unbindVAO();
         return new RawModel(vaoID, indices.length);
     }
 
-    public int loadTexture(String fileName) {
+    public int loadTexture(String fileName) throws IOException {
         int width, height;
         ByteBuffer buffer;
-        try (MemoryStack = MemoryStack.stackPush()) {
+        try (MemoryStack stack = MemoryStack.stackPush()) {
             IntBuffer w = stack.mallocInt(1);
             IntBuffer h = stack.mallocInt(1);
             IntBuffer comp = stack.mallocInt(1);
             
-            buffer = stbi_load(fileName, w, h, comp, 4);
+            buffer = STBImage.stbi_load(fileName, w, h, comp, 4);
             if (buffer == null) {
-                throw new IOException("Image file [" + fileName + "] not loaded: " + stbi_failure_reason());
+                throw new IOException("Image file [" + fileName + "] not loaded: " + STBImage.stbi_failure_reason());
             }
             
             width = w.get();
             height = h.get();
         }
+
+        int textureID = GL11.glGenTextures();
+        textures.add(textureID);
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureID);
+        GL11.glPixelStorei(GL11.GL_UNPACK_ALIGNMENT, 1);
+        GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, width, height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
+        GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
+        STBImage.stbi_image_free(buffer);
+        return textureID;
     }
 
     public void cleanUp() {
@@ -52,6 +65,10 @@ public class Loader {
         for (int vbo : vbos) {
             GL15.glDeleteBuffers(vbo);
         }
+
+        for (int texture : textures) {
+            GL11.glDeleteTextures(texture);
+        }
     }
 
     private int createVAO() {
@@ -61,13 +78,13 @@ public class Loader {
         return vaoID;
     }
 
-    private void storeDataInAttributeList(int attribNumber, float[] positions) {
+    private void storeDataInAttributeList(int attribNumber, int coordinateSize,float[] positions) {
         int vboID = GL15.glGenBuffers();
         vbos.add(vboID);
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboID);
         FloatBuffer buffer = storeDataInFloatBuffer(positions);
         GL15.glBufferData(GL15.GL_ARRAY_BUFFER, buffer, GL15.GL_STATIC_DRAW);
-        GL20.glVertexAttribPointer(attribNumber, 3, GL11.GL_FLOAT, false, 0, 0);
+        GL20.glVertexAttribPointer(attribNumber, coordinateSize, GL11.GL_FLOAT, false, 0, 0);
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
     }
 

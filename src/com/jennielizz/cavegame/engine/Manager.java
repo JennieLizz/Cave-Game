@@ -1,5 +1,7 @@
 package com.jennielizz.cavegame.engine;
 
+import java.io.IOException;
+
 import com.jennielizz.cavegame.display.Display;
 
 public class Manager {
@@ -12,7 +14,12 @@ public class Manager {
 
         Display display = new Display(width, height, title);
 
-        display.BeginUpdateLoop();
+        try {
+            display.BeginUpdateLoop();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
         display.Destroy();
 
