@@ -7,6 +7,7 @@ import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 
+import com.jennielizz.cavegame.engine.Manager;
 import com.jennielizz.cavegame.engine.RawModel;
 import com.jennielizz.cavegame.entites.Entity;
 import com.jennielizz.cavegame.utils.Maths;
@@ -36,6 +37,8 @@ public class Renderer {
     public void render(Entity entity, StaticShader shader) {
         RawModel model = entity.getTexture();
         GL30.glBindVertexArray(model.getVaoID());
+        GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
+        GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
         GL20.glEnableVertexAttribArray(0);
         GL20.glEnableVertexAttribArray(1);
 
@@ -52,7 +55,7 @@ public class Renderer {
     }
 
     private void createProjectionMatrix() {
-        float aspectRatio = (float) 1280 / (float) 720;
+        float aspectRatio = (float) Manager.width / (float) Manager.height;
         float y_scale = (float) ((1f / Math.tan(Math.toRadians(FOV / 2f))) * aspectRatio);
         float x_scale = y_scale / aspectRatio;
         float frustum_length = FAR_PLANE - NEAR_PLANE;

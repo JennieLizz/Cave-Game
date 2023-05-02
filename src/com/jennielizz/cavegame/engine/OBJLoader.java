@@ -13,8 +13,6 @@ public class OBJLoader {
             System.err.println("Couldn't load file!");
             e.printStackTrace();
             System.exit(-1);
-        }
-        
-    }
-    
+        }   
+    }   
 }
