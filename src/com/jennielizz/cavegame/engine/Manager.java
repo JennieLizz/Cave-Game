@@ -6,22 +6,26 @@ import com.jennielizz.cavegame.display.Display;
 
 public class Manager {
 
-    int width = 1280, height = 720;
-    String title = "Cave Game";
-
-    public Manager() {
+    public static void createGameWindow(int width, int height, String title) {
         System.out.println("Manager created!");
 
         Display display = new Display(width, height, title);
 
-        try {
-            display.BeginUpdateLoop();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        display.beginUpdateLoop();
 
-        display.Destroy();
+        display.destroy();
+
+        System.out.println("Manager destroyed!");
+    }
+
+    public static void createLauncherWindow(int width, int height, String title) {
+        System.out.println("Manager created!");
+
+        Display display = new Display(width, height, title);
+
+        display.beginUpdateLoop();
+
+        display.destroy();
 
         System.out.println("Manager destroyed!");
     }

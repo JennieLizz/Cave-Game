@@ -18,12 +18,15 @@ import com.jennielizz.cavegame.entites.Entity;
 public class Display {
 
     public long window;
+    public String launchArguments;
 
-    public Display(int width, int height, String title) {
+    public Display(int width, int height, String title, String launchArguments) {
         if (!GLFW.glfwInit()) {
             System.out.println("GLFW failed to initialize!");
             System.exit(1);
         }
+
+        this.launchArguments = launchArguments;
 
         GLFW.glfwDefaultWindowHints();
         GLFW.glfwWindowHint(GLFW.GLFW_VISIBLE, GLFW.GLFW_FALSE);
@@ -71,7 +74,7 @@ public class Display {
         GLFW.glfwShowWindow(window);
     }
 
-    public void BeginUpdateLoop() throws IOException {
+    public void beginUpdateLoop() {
         GL.createCapabilities();
         GL11.glClearColor(0, 0, 0, 0);
 
@@ -214,7 +217,7 @@ public class Display {
         tloader.cleanUp();
     }
 
-    public void Destroy() {
+    public void destroy() {
         GLFW.glfwDestroyWindow(window);
         GLFW.glfwTerminate();
     }

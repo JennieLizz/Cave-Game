@@ -5,7 +5,12 @@ import com.jennielizz.cavegame.engine.Manager;
 public class App {
 
     public static void main(String[] args) {
-        new Manager();
+        
+        
+        
+        
+        
+        //new Manager();
     }
     
 }
