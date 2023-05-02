@@ -2,6 +2,7 @@ package com.jennielizz.cavegame.display;
 
 import org.joml.Matrix4f;
 
+import com.jennielizz.cavegame.engine.ShaderProgram;
 import com.jennielizz.cavegame.entites.Camera;
 import com.jennielizz.cavegame.utils.Maths;
 

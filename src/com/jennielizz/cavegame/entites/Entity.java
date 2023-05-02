@@ -2,7 +2,7 @@ package com.jennielizz.cavegame.entites;
 
 import org.joml.Vector3f;
 
-import com.jennielizz.cavegame.display.RawModel;
+import com.jennielizz.cavegame.engine.RawModel;
 
 public class Entity {
 

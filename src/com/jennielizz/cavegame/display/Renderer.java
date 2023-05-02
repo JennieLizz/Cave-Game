@@ -7,6 +7,7 @@ import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 
+import com.jennielizz.cavegame.engine.RawModel;
 import com.jennielizz.cavegame.entites.Entity;
 import com.jennielizz.cavegame.utils.Maths;
 

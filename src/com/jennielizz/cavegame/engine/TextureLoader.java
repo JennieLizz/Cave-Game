@@ -1,4 +1,4 @@
-package com.jennielizz.cavegame.display;
+package com.jennielizz.cavegame.engine;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -15,7 +15,7 @@ import org.lwjgl.opengl.GL30;
 import org.lwjgl.stb.STBImage;
 import org.lwjgl.system.MemoryStack;
 
-public class Loader {
+public class TextureLoader {
 
     private List<Integer> vaos = new ArrayList<Integer>();
     private List<Integer> vbos = new ArrayList<Integer>();
@@ -30,7 +30,7 @@ public class Loader {
         return new RawModel(vaoID, indices.length);
     }
 
-    public int loadTexture(String fileName) throws IOException {
+    public int loadTexture(String path) {
         int width, height;
         ByteBuffer buffer;
         try (MemoryStack stack = MemoryStack.stackPush()) {
@@ -38,9 +38,13 @@ public class Loader {
             IntBuffer h = stack.mallocInt(1);
             IntBuffer comp = stack.mallocInt(1);
             
-            buffer = STBImage.stbi_load(fileName, w, h, comp, 4);
-            if (buffer == null) {
-                throw new IOException("Image file [" + fileName + "] not loaded: " + STBImage.stbi_failure_reason());
+            buffer = STBImage.stbi_load(path, w, h, comp, 4);
+            try {
+                if (buffer == null) {
+                    throw new IOException("Failed to load [" + path + "], Failed to load image: " + STBImage.stbi_failure_reason());
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
             
             width = w.get();

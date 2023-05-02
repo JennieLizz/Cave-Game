@@ -10,6 +10,8 @@ import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.system.MemoryStack;
 
+import com.jennielizz.cavegame.engine.RawModel;
+import com.jennielizz.cavegame.engine.TextureLoader;
 import com.jennielizz.cavegame.entites.Camera;
 import com.jennielizz.cavegame.entites.Entity;
 
@@ -73,7 +75,7 @@ public class Display {
         GL.createCapabilities();
         GL11.glClearColor(0, 0, 0, 0);
 
-        Loader loader = new Loader();
+        TextureLoader tloader = new TextureLoader();
         StaticShader shader = new StaticShader();
         Renderer renderer = new Renderer(shader);
         Camera camera = new Camera(new Vector3f(0,0,0), 0, 0, 0);
@@ -157,8 +159,8 @@ public class Display {
 
     };
 
-        RawModel model = loader.loadToVAO(vertices, textureCoords, indices);
-        model.setTexture(new Texture(loader.loadTexture("res/textures/TheMostRevisedPerson.png")));
+        RawModel model = tloader.loadToVAO(vertices, textureCoords, indices);
+        model.setTexture(new Texture(tloader.loadTexture("res/textures/TheMostRevisedPerson.png")));
 
         Entity entity = new Entity(model, new Vector3f(0,0,-1),0,0,0,1);
 
@@ -209,7 +211,7 @@ public class Display {
         }
 
         shader.cleanUp();
-        loader.cleanUp();
+        tloader.cleanUp();
     }
 
     public void Destroy() {

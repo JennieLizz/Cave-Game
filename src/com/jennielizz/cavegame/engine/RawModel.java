@@ -1,4 +1,6 @@
-package com.jennielizz.cavegame.display;
+package com.jennielizz.cavegame.engine;
+
+import com.jennielizz.cavegame.display.Texture;
 
 public class RawModel {
 

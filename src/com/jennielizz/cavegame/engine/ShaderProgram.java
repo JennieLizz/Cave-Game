@@ -1,4 +1,4 @@
-package com.jennielizz.cavegame.display;
+package com.jennielizz.cavegame.engine;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
