@@ -8,7 +8,6 @@ import org.joml.Vector3f;
 import com.jennielizz.cavegame.display.Renderer;
 import com.jennielizz.cavegame.display.StaticShader;
 import com.jennielizz.cavegame.display.Texture;
-import com.jennielizz.cavegame.engine.Manager;
 import com.jennielizz.cavegame.engine.RawModel;
 import com.jennielizz.cavegame.engine.TextureLoader;
 import com.jennielizz.cavegame.entites.Camera;
@@ -74,7 +73,6 @@ public class Launcher {
                 entities.add(entity);
             }
         }
-
     }
 
     public static void updateLauncher() {
